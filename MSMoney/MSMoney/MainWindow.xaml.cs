@@ -20,9 +20,17 @@ namespace MSMoney
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainViewModel context;
+
         public MainWindow()
         {
             InitializeComponent();
+            context = (MainViewModel)DataContext;
+        }
+
+        private void BTNSave_Click(object sender, RoutedEventArgs e)
+        {
+            context.ShowMessageWindow();
         }
     }
 }

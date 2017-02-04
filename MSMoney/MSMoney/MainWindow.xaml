@@ -5,8 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MSMoney"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="300">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid DataContext="{Binding Current}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Label Content="Name:" Grid.Row="0" Grid.Column="0"/>
+            <TextBox x:Name="TBName" Text="{Binding Name}" Grid.Row="0" Grid.Column="1" Margin="3" HorizontalAlignment="Stretch"/>
+            <Label Content="Price:" Grid.Row="1" Grid.Column="0"/>
+            <TextBox x:Name="TBPrice" Text="{Binding Price}" Grid.Row="1" Grid.Column="1" Margin="3" HorizontalAlignment="Stretch"/>
+            <Label Content="Amount:" Grid.Row="2" Grid.Column="0"/>
+            <TextBox x:Name="TBAmount" Text="{Binding Amount}" Grid.Row="2" Grid.Column="1" Margin="3" HorizontalAlignment="Stretch"/>
+            <Button Grid.Column="0" Grid.Row="3" Content="Save" Grid.ColumnSpan="2" Margin="2" x:Name="BTNSave" Click="BTNSave_Click"/>
+        </Grid>
+        <ListView Grid.Row="1" x:Name="LVList" Margin="3"/>
+        <DockPanel Grid.Row="2">
+            <Label>Statistics:</Label>
+            <Label>On last month:</Label>
+            <Label x:Name="LLastMonth"/>
+            <Label>zł.</Label>
+            <Label>This month:</Label>
+            <Label x:Name="ThisMonth"/>
+            <Label>zł</Label>
+        </DockPanel>
     </Grid>
 </Window>
