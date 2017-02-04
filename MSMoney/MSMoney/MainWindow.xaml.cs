@@ -26,11 +26,20 @@ namespace MSMoney
         {
             InitializeComponent();
             context = (MainViewModel)DataContext;
+            context.Init();
         }
 
         private void BTNSave_Click(object sender, RoutedEventArgs e)
         {
-            context.ShowMessageWindow();
+            context.SaveNewEntry();
+            TBAmount.Text = "";
+            TBName.Text = "";
+            TBPrice.Text = "";
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            context.SaveData();
         }
     }
 }
