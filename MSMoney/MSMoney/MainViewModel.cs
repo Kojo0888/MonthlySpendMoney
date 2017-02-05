@@ -128,11 +128,19 @@ namespace MSMoney
 
             try
             {
-                root.Entries.Add(new Entry() {
-                    Amount = int.Parse(Amount),
-                    Name = Name,
-                    Price = decimal.Parse(Price)
-                });
+                if (root.Entries.Exists(e => e.Name == Name && e.Price == decimal.Parse(Price)))
+                {
+                    root.Entries.Find(f => f.Name == Name && f.Price == decimal.Parse(Price)).Amount += int.Parse(Amount);
+                }
+                else
+                { 
+                    root.Entries.Add(new Entry()
+                    {
+                        Amount = int.Parse(Amount),
+                        Name = Name,
+                        Price = decimal.Parse(Price)
+                    });
+                }
             }
             catch(FormatException)
             {
