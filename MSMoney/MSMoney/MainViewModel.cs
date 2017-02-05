@@ -24,8 +24,6 @@ namespace MSMoney
 
         public string Amount { get; set; }
 
-        //private XmlDocument doc { set; get; } = new XmlDocument();
-
         public List<Entry> Elements
         {
             get
@@ -61,11 +59,7 @@ namespace MSMoney
                         DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml"));
                 }
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Root));
-                using (FileStream fs = new FileStream(path, FileMode.Open))
-                {
-                    root = (Root)serializer.Deserialize(fs);
-                }
+                root = DeserializeRoot(path);
             }
             catch (Exception e)
             {
@@ -73,6 +67,7 @@ namespace MSMoney
             }
 
             CountPrices();
+            CountLastMonthPrices();
         }
 
         private void CountPrices()
@@ -80,15 +75,39 @@ namespace MSMoney
             decimal countedPrice = 0;
             foreach (var item in root.Entries)
             {
-                countedPrice += (decimal)item.Price * item.Amount;
+                countedPrice += item.Price * item.Amount;
             }
             ThisMonthPrice = countedPrice;
 
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ThisMonthPrice"));
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Elements"));
-            //ThisMonthPrice.NotifyPropertyChanged
+            //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Elements"));
+        }
 
-            //this.PropertyChanged.
+        private void CountLastMonthPrices()
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    DateTime.Now.Year + "_" + DateTime.Now.AddMonths(-1).Month + ".xml");
+            if (File.Exists(path))
+            {
+                Root lastMonthRoot = DeserializeRoot(path);
+                    
+                decimal countedPrice = 0;
+                foreach (var item in lastMonthRoot.Entries)
+                {
+                    countedPrice += item.Price * item.Amount;
+                }
+                PreviousMonthPrice = countedPrice;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("PreviousMonthPrice"));
+            }
+        }
+
+        private Root DeserializeRoot(string path)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Root));
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                return (Root)serializer.Deserialize(fs);
+            }
         }
 
         public bool SaveNewEntry()
@@ -105,16 +124,10 @@ namespace MSMoney
             {
                 return false;
             }
-            //Current.Name = "";
-            //Current.Amount = 0;
-            //Current.Price = 0;
 
             CountPrices();
 
             return true;
-            //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Name"));
-            //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Amount"));
-            //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Price"));
         }
 
         public void SaveData()
