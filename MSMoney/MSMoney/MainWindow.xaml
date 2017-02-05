@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MSMoney"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="400" 
+        Title="Monthly Spend Money" Height="350" Width="400" 
         Closing="Window_Closing"
         Loaded="Window_Loaded">
     <Window.Resources>

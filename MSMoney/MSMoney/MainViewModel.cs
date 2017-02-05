@@ -42,10 +42,19 @@ namespace MSMoney
 
         public decimal PreviousMonthPrice { set; get; }
 
+        private string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                   "MothlySpendMoney\\" + DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml");
+
         public void Init()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml");
+            string dirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "MothlySpendMoney");
+
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+
             try
             {
 
@@ -55,8 +64,7 @@ namespace MSMoney
                     doc = new XmlDocument();
                     doc.AppendChild(doc.CreateXmlDeclaration("1.0", "UTF-8", "yes"));
                     doc.AppendChild(doc.CreateNode(XmlNodeType.Element, "Root", ""));
-                    doc.Save(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                        DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml"));
+                    doc.Save(Path.Combine(dirPath, DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml"));
                 }
 
                 root = DeserializeRoot(path);
@@ -86,7 +94,9 @@ namespace MSMoney
         private void CountLastMonthPrices()
         {
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    DateTime.Now.Year + "_" + DateTime.Now.AddMonths(-1).Month + ".xml");
+                "MothlySpendMoney\\" + DateTime.Now.AddMonths(-1).Year 
+                + "_" + DateTime.Now.AddMonths(-1).Month + ".xml");
+
             if (File.Exists(path))
             {
                 Root lastMonthRoot = DeserializeRoot(path);
@@ -120,7 +130,7 @@ namespace MSMoney
                     Price = decimal.Parse(Price)
                 });
             }
-            catch(FormatException e)
+            catch(FormatException)
             {
                 return false;
             }
@@ -132,9 +142,6 @@ namespace MSMoney
 
         public void SaveData()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml");
-
             XmlSerializer serializer = new XmlSerializer(typeof(Root));
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
