@@ -18,7 +18,23 @@ namespace MSMoney
     {
         public Entry Current { set; get; } = new Entry();
 
+        public string Name { get; set; }
+
+        public string Price { get; set; }
+
+        public string Amount { get; set; }
+
         //private XmlDocument doc { set; get; } = new XmlDocument();
+
+        public List<Entry> Elements
+        {
+            get
+            {
+                if (root == null)
+                    return null;
+                return root.Entries;
+            }
+        } 
 
         private Root root;
 
@@ -68,26 +84,34 @@ namespace MSMoney
             }
             ThisMonthPrice = countedPrice;
 
-            PropertyChanged.Invoke(this,new PropertyChangedEventArgs("ThisMonthPrice"));
-
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ThisMonthPrice"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Elements"));
             //ThisMonthPrice.NotifyPropertyChanged
 
             //this.PropertyChanged.
         }
 
-        public void SaveNewEntry()
+        public bool SaveNewEntry()
         {
-            root.Entries.Add(new Entry() {
-                Amount = Current.Amount,
-                Name = Current.Name,
-                Price = Current.Price
-            });
-            Current.Name = "";
-            Current.Amount = 0;
-            Current.Price = 0;
+            try
+            {
+                root.Entries.Add(new Entry() {
+                    Amount = int.Parse(Amount),
+                    Name = Name,
+                    Price = decimal.Parse(Price)
+                });
+            }
+            catch(FormatException e)
+            {
+                return false;
+            }
+            //Current.Name = "";
+            //Current.Amount = 0;
+            //Current.Price = 0;
 
             CountPrices();
 
+            return true;
             //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Name"));
             //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Amount"));
             //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Price"));

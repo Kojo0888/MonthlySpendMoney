@@ -24,9 +24,14 @@ namespace MSMoney.Model
         public string Name { get; set; }
 
         [DataMember]
-        public float Price { get; set; }
+        public decimal Price { get; set; }
 
         [DataMember]
         public int Amount { get; set; }
+
+        public override string ToString()
+        {
+            return Name + " - " + Price + "zł x" + Amount;
+        }
     }
 }
