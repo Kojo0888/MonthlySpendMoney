@@ -42,6 +42,8 @@ namespace MSMoney
 
         public decimal PreviousMonthPrice { set; get; }
 
+        public decimal CurrentPrice { set; get; }
+
         private string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                    "MothlySpendMoney\\" + DateTime.Now.Year + "_" + DateTime.Now.Month + ".xml");
 
@@ -122,6 +124,8 @@ namespace MSMoney
 
         public bool SaveNewEntry()
         {
+            Price = Price.Replace('.',',');
+
             try
             {
                 root.Entries.Add(new Entry() {
@@ -134,6 +138,9 @@ namespace MSMoney
             {
                 return false;
             }
+
+            CurrentPrice += decimal.Parse(Price) * int.Parse(Amount);
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentPrice"));
 
             CountPrices();
 

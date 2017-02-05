@@ -67,8 +67,6 @@ namespace MSMoney
         {
             if (e.Key == Key.Enter)
                 TBAmount.Focus();
-            if (e.Key == Key.OemPeriod)
-                MessageBox.Show("Periods will be ignored");
         }
 
         private void TBAmount_KeyDown(object sender, KeyEventArgs e)

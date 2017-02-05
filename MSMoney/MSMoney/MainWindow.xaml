@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MSMoney"
         mc:Ignorable="d"
-        Title="Monthly Spend Money" Height="350" Width="400" 
+        Title="Monthly Spend Money" Height="350" Width="450" 
         Closing="Window_Closing"
         Loaded="Window_Loaded">
     <Window.Resources>
@@ -46,8 +46,10 @@
             <Label Content="{Binding PreviousMonthPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label>zł.</Label>
             <Label>This month:</Label>
-            <Label Content="{Binding ThisMonthPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" x:Name="dojfsdjfn"/>
-            <Label>zł</Label>
+            <Label Content="{Binding ThisMonthPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <Label>zł. Current</Label>
+            <Label Content="{Binding CurrentPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <Label>zł.</Label>
         </DockPanel>
     </Grid>
 </Window>
